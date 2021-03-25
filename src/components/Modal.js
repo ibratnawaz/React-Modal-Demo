@@ -1,12 +1,21 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
+import { GlobalContext } from '../App'
 
-const Modal = ({ clickHandler }) => {
+const Modal = () => {
   const inpRef = useRef()
+
+  const { onAdd, modalHandler } = useContext(GlobalContext)
+
+  const [details, setDetails] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  })
 
   useEffect(() => {
     let handler = (e) => {
       if (!inpRef.current.contains(e.target)) {
-        clickHandler()
+        modalHandler()
       }
     }
     document.addEventListener('mousedown', handler)
@@ -17,26 +26,58 @@ const Modal = ({ clickHandler }) => {
     // eslint-disable-next-line
   }, [inpRef])
 
+  const handleChange = (e) => {
+    setDetails({ ...details, [e.target.name]: e.target.value })
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    console.log(details)
+    onAdd(details)
+  }
+
   return (
     <div className='modal-container'>
       <div className='modal-box' ref={inpRef}>
-        <div className='modal-close' onClick={clickHandler}>
+        <div className='modal-close' onClick={modalHandler}>
           X
         </div>
         <div className='modal-title'>New Modal</div>
         <div className='modal-body'>
-          <label htmlFor=''>Name : </label>
-          <input type='text' />
-          <br />
-          <label htmlFor=''>Email : </label>
-          <input type='text' />
-          <br />
-          <label htmlFor=''>Mobile:</label>
-          <input type='number' />
-          <br />
+          <form onSubmit={submitHandler}>
+            <label htmlFor='name'>Name : </label>
+            <input
+              type='text'
+              id='name'
+              name='name'
+              onChange={handleChange}
+              required
+            />
+            <br />
+            <label htmlFor='email'>Email : </label>
+            <input
+              type='text'
+              id='email'
+              name='email'
+              onChange={handleChange}
+              required
+            />
+            <br />
+            <label htmlFor='phone'>Mobile:</label>
+            <input
+              type='number'
+              id='phone'
+              name='phone'
+              onChange={handleChange}
+              required
+            />
+            <br />
+            <br />
+            <button className='btn btn-success'>Add</button>
+          </form>
         </div>
         <div className='modal-footer'>
-          <button className='btn btn-primary' onClick={clickHandler}>
+          <button className='btn btn-primary' onClick={modalHandler}>
             Close
           </button>
         </div>
