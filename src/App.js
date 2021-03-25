@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import Modal from './components/Modal'
 
 function App() {
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    console.log(show)
+  }, [show])
+
+  const clickHandler = () => {
+    setShow((prevState) => !prevState)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container'>
+      <h1>React Modal Demo</h1>
+      <button className='btn my-btn' onClick={clickHandler}>
+        Show Modal
+      </button>
+      {show && <Modal clickHandler={clickHandler} />}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
